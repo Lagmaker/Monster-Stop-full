@@ -29,9 +29,15 @@ public class CategoryService : ICategoryService
 
     public async Task UpdateCategoryAsync(Category category)
     {
-        _context.Categories.Update(category);
+        var existingCategory = await _context.Categories.FindAsync(category.Id);
+        if (existingCategory == null)
+            return; // or throw exception
+
+        existingCategory.Name = category.Name;
+        // Update properties as needed
         await _context.SaveChangesAsync();
     }
+
 
     public async Task DeleteCategoryAsync(int id)
     {

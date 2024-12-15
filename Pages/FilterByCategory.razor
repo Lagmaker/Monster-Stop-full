@@ -3,43 +3,43 @@
 @inject IProductService ProductService
 
 <div class="transparent-panel">
-    <h3 class="rainbow-text">Filter Products By Category</h3>
-    <p>Showing products grouped by supplier for category ID: <strong>@CategoryId</strong></p>
+	<h3 class="rainbow-text">Filter Products By Category</h3>
+	<p>Showing products grouped by supplier for category ID: <strong>@CategoryId</strong></p>
 
-    @if (GroupedData == null)
-    {
-            <p>Loading...</p>
-    }
-    else if (!GroupedData.Any())
-    {
-            <p>No products found for this category.</p>
-    }
-    else
-    {
-        @foreach (var group in GroupedData)
-        {
-                    <h4 style="margin-top:30px; text-shadow:0 0 5px rgba(255,255,255,0.5); color:#e1e1ff;">
-                        Supplier: @group.Key.Name
-                    </h4>
-                    <ul style="list-style:none; padding-left:0; margin-top:10px;">
-                @foreach (var product in group)
-                {
-                                <li style="margin-bottom:5px;">
-                                    <span style="font-weight:600; color:#fff;">@product.Name</span> 
-                                    <span style="color:rgba(255,255,255,0.7);">(@product.Price:C)</span>
-                                </li>
-                }
-                    </ul>
-        }
-    }
+	@if (GroupedData == null)
+	{
+				<p>Loading...</p>
+	}
+	else if (!GroupedData.Any())
+	{
+				<p>No products found for this category.</p>
+	}
+	else
+	{
+		@foreach (var group in GroupedData)
+		{
+							<h4 style="margin-top:30px; text-shadow:0 0 5px rgba(255,255,255,0.5); color:#e1e1ff;">
+								Supplier: @group.Key.Name
+							</h4>
+							<ul style="list-style:none; padding-left:0; margin-top:10px;">
+				@foreach (var product in group)
+				{
+											<li style="margin-bottom:5px;">
+												<span style="font-weight:600; color:#fff;">@product.Name</span> 
+												<span style="color:rgba(255,255,255,0.7);">(@product.Price:C)</span>
+											</li>
+				}
+							</ul>
+		}
+	}
 </div>
 
 @code {
-    [Parameter] public int CategoryId { get; set; }
-    private IEnumerable<IGrouping<Supplier, Product>>? GroupedData;
+	[Parameter] public int CategoryId { get; set; }
+	private IEnumerable<IGrouping<Supplier, Product>>? GroupedData;
 
-    protected override async Task OnInitializedAsync()
-    {
-        GroupedData = await ProductService.GetProductsGroupedBySupplierAsync(CategoryId);
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		GroupedData = await ProductService.GetProductsGroupedBySupplierAsync(CategoryId);
+	}
 }

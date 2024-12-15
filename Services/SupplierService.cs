@@ -29,7 +29,19 @@ public class SupplierService : ISupplierService
 
     public async Task UpdateSupplierAsync(Supplier supplier)
     {
-        _context.Suppliers.Update(supplier);
+        // Fetch the existing supplier from the database
+        var existingSupplier = await _context.Suppliers.FindAsync(supplier.Id);
+        if (existingSupplier == null)
+        {
+            // Could throw an exception or return early if desired
+            return;
+        }
+
+        // Update only the properties you want to allow changing
+        existingSupplier.Name = supplier.Name;
+        existingSupplier.Location = supplier.Location;
+
+        // Save changes without calling Update() to avoid tracking conflicts
         await _context.SaveChangesAsync();
     }
 

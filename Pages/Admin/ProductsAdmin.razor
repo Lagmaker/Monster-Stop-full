@@ -1,57 +1,99 @@
 ﻿@page "/admin/products"
 @using MonsterStop.Models
 @inject IProductService ProductService
+@inject ICategoryService CategoryService
+@inject ISupplierService SupplierService
 
 <div class="transparent-panel">
     <h3 class="rainbow-text">Manage Products</h3>
 
-    <button class="btn-neon" @onclick="AddNew" style="margin-bottom:20px;">Add New Product</button>
+    @if (ShowForm)
+    {
+            <div class="form-container" style="margin-top:20px;">
+                <h4>@(EditingProduct.Id == 0 ? "Add New Product" : "Edit Product")</h4>
 
-    @if (Products == null)
-    {
-            <p>Loading...</p>
-    }
-    else if (!Products.Any())
-    {
-            <p>No products available.</p>
+                <input class="input-glass" @bind="EditingProduct.Name" placeholder="Product Name" style="margin-top:10px;" />
+                <input class="input-glass" @bind="EditingProduct.Description" placeholder="Description" style="margin-top:10px;" />
+                <input class="input-glass" @bind="EditingProduct.Price" placeholder="Price" type="number" style="margin-top:10px;" />
+
+                <select class="input-glass" @bind="EditingProduct.CategoryId" style="margin-top:10px;">
+                    <option value="">Select Category</option>
+                @foreach (var cat in Categories)
+                {
+                            <option value="@cat.Id">@cat.Name</option>
+                }
+                </select>
+
+                <select class="input-glass" @bind="EditingProduct.SupplierId" style="margin-top:10px;">
+                    <option value="">Select Supplier</option>
+                @foreach (var sup in Suppliers)
+                {
+                            <option value="@sup.Id">@sup.Name</option>
+                }
+                </select>
+
+                <div style="margin-top:20px;">
+                    <button class="btn-neon" @onclick="SaveProduct">Save</button>
+                    <button class="btn-neon-outlined" style="margin-left:10px;" @onclick="Cancel">Cancel</button>
+                </div>
+            </div>
     }
     else
     {
-            <table style="width:100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
-                        <th style="text-align:left; padding:10px;">Name</th>
-                        <th style="text-align:left; padding:10px;">Price</th>
-                        <th style="text-align:left; padding:10px;">Category</th>
-                        <th style="text-align:left; padding:10px;">Supplier</th>
-                        <th style="text-align:left; padding:10px; width:150px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach (var p in Products)
-                {
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <td style="padding:10px;">@p.Name</td>
-                            <td style="padding:10px;">@p.Price:C</td>
-                            <td style="padding:10px;">@p.Category.Name</td>
-                            <td style="padding:10px;">@p.Supplier.Name</td>
-                            <td style="padding:10px;">
-                                <button class="btn-neon" style="margin-right:10px;" @onclick="() => Edit(p)">Edit</button>
-                                <button class="btn-neon-outlined" @onclick="() => Delete(p.Id)">Delete</button>
-                            </td>
-                        </tr>
-                }
-                </tbody>
-            </table>
+            <button class="btn-neon" @onclick="AddNew" style="margin-bottom:20px;">Add New Product</button>
+
+        @if (Products == null)
+        {
+                    <p>Loading...</p>
+        }
+        else if (!Products.Any())
+        {
+                    <p>No products available.</p>
+        }
+        else
+        {
+                    <table style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                <th style="text-align:left; padding:10px;">Name</th>
+                                <th style="text-align:left; padding:10px;">Price</th>
+                                <th style="text-align:left; padding:10px;">Category</th>
+                                <th style="text-align:left; padding:10px;">Supplier</th>
+                                <th style="text-align:left; padding:10px; width:150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    @foreach (var p in Products)
+                    {
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding:10px;">@p.Name</td>
+                                    <td style="padding:10px;">@p.Price:C</td>
+                                    <td style="padding:10px;">@p.Category.Name</td>
+                                    <td style="padding:10px;">@p.Supplier.Name</td>
+                                    <td style="padding:10px;">
+                                        <button class="btn-neon" style="margin-right:10px;" @onclick="@(() => Edit(p))">Edit</button>
+                                        <button class="btn-neon-outlined" @onclick="@(() => Delete(p.Id))">Delete</button>
+                                    </td>
+                                </tr>
+                    }
+                        </tbody>
+                    </table>
+        }
     }
 </div>
 
 @code {
     private List<Product>? Products;
+    private List<Category>? Categories;
+    private List<Supplier>? Suppliers;
+    private bool ShowForm = false;
+    private Product EditingProduct = new Product();
 
     protected override async Task OnInitializedAsync()
     {
         Products = await ProductService.GetAllProductsAsync();
+        Categories = await CategoryService.GetAllCategoriesAsync();
+        Suppliers = await SupplierService.GetAllSuppliersAsync();
     }
 
     private async Task Delete(int id)
@@ -62,11 +104,43 @@
 
     private void AddNew()
     {
-        // Future: Show a form modal or section to add a new product
+        EditingProduct = new Product();
+        ShowForm = true;
     }
 
     private void Edit(Product product)
     {
-        // Future: Show a form modal or section to edit the selected product
+        EditingProduct = new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                CategoryId = product.CategoryId,
+                SupplierId = product.SupplierId
+            };
+        ShowForm = true;
+    }
+
+    private async Task SaveProduct()
+    {
+        if (EditingProduct.Id == 0)
+        {
+            // Add new product
+            await ProductService.AddProductAsync(EditingProduct);
+        }
+        else
+        {
+            // Update existing product
+            await ProductService.UpdateProductAsync(EditingProduct);
+        }
+
+        ShowForm = false;
+        Products = await ProductService.GetAllProductsAsync();
+    }
+
+    private void Cancel()
+    {
+        ShowForm = false;
     }
 }
