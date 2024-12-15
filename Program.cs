@@ -4,13 +4,19 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Monster_Stop_full.Data;
 using MonsterStop.Models;
+using Microsoft.EntityFrameworkCore.SqlServer;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+// SQLITE
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlite("Data Source=monsterstop.db"));
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("Data Source=monsterstop.db"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
