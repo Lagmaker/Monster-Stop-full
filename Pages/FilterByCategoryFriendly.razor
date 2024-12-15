@@ -1,0 +1,90 @@
+﻿@page "/filterbycategory"
+@using MonsterStop.Models
+@inject IProductService ProductService
+@inject ICategoryService CategoryService
+
+<div class="transparent-panel">
+    <h3 class="rainbow-text">Filter Products By Category</h3>
+    <p>Select a category to view products grouped by supplier.</p>
+
+    @if (Categories == null)
+    {
+            <p>Loading categories...</p>
+    }
+    else
+    {
+            <select class="input-glass" style="max-width:300px;" @onchange="OnCategoryChanged">
+                <option value="">-- Select Category --</option>
+            @foreach (var cat in Categories)
+            {
+                        <option value="@cat.Id">@cat.Name</option>
+            }
+            </select>
+    }
+
+    @if (IsLoading && SelectedCategoryId != null)
+    {
+            <p>Loading products for selected category...</p>
+    }
+    else if (GroupedData != null && GroupedData.Any())
+    {
+        @foreach (var group in GroupedData)
+        {
+                    <h4 style="margin-top:30px; text-shadow:0 0 5px rgba(255,255,255,0.5); color:#e1e1ff;">
+                        Supplier: @group.Key.Name
+                    </h4>
+                    <ul style="list-style:none; padding-left:0; margin-top:10px;">
+                @foreach (var product in group)
+                {
+                                <li style="margin-bottom:5px;">
+                                    <span style="font-weight:600; color:#fff;">@product.Name</span> 
+                                    <span style="color:rgba(255,255,255,0.7);">(@product.Price:C)</span>
+                                </li>
+                }
+                    </ul>
+        }
+    }
+    else if (SelectedCategoryId != null)
+    {
+            <p>No products found for this category.</p>
+    }
+</div>
+
+@code {
+    private List<Category>? Categories;
+    private IEnumerable<IGrouping<Supplier, Product>>? GroupedData;
+    private int? SelectedCategoryId;
+    private bool IsLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load categories on initialization
+        Categories = await CategoryService.GetAllCategoriesAsync();
+    }
+
+    private async Task OnCategoryChanged(ChangeEventArgs e)
+    {
+        var selectedValue = e.Value?.ToString();
+        if (int.TryParse(selectedValue, out var catId))
+        {
+            SelectedCategoryId = catId;
+            await LoadProductsForCategory(catId);
+        }
+        else
+        {
+            SelectedCategoryId = null;
+            GroupedData = null;
+        }
+    }
+
+    private async Task LoadProductsForCategory(int categoryId)
+    {
+        IsLoading = true;
+        StateHasChanged();
+
+        GroupedData = await ProductService.GetProductsGroupedBySupplierAsync(categoryId);
+
+        IsLoading = false;
+        StateHasChanged();
+    }
+}
