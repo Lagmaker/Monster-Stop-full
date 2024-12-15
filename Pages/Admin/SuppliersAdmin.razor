@@ -1,0 +1,116 @@
+﻿@page "/admin/suppliers"
+@using MonsterStop.Models
+@inject ISupplierService SupplierService
+
+<h3>Manage Suppliers</h3>
+
+@if (ShowForm)
+{
+        <div class="form-container">
+            <h4>@(EditingSupplier.Id == 0 ? "Add New Supplier" : "Edit Supplier")</h4>
+            <input @bind="EditingSupplier.Name" placeholder="Supplier Name" />
+            <input @bind="EditingSupplier.Location" placeholder="Location" />
+
+            <button @onclick="SaveSupplier">Save</button>
+            <button @onclick="Cancel">Cancel</button>
+        </div>
+}
+else
+{
+        <button @onclick="AddNew">Add New Supplier</button>
+
+    @if (Suppliers == null)
+    {
+                <p>Loading...</p>
+    }
+    else if (!Suppliers.Any())
+    {
+                <p>No suppliers available.</p>
+    }
+    else
+    {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                @foreach (var s in Suppliers)
+                {
+                                <tr>
+                                    <td>@s.Name</td>
+                                    <td>@s.Location</td>
+                                    <td>
+                                        <button @onclick="@(() => Edit(s))">Edit</button>
+                                        <button @onclick="@(() => Delete(s.Id))">Delete</button>
+                                    </td>
+                                </tr>
+                }
+                    </tbody>
+                </table>
+    }
+}
+
+@code {
+    private List<Supplier>? Suppliers;
+    private Supplier EditingSupplier = new Supplier();
+    private bool ShowForm = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSuppliers();
+    }
+
+    private async Task LoadSuppliers()
+    {
+        Suppliers = await SupplierService.GetAllSuppliersAsync();
+    }
+
+    private void AddNew()
+    {
+        EditingSupplier = new Supplier();
+        ShowForm = true;
+    }
+
+    private void Edit(Supplier supplier)
+    {
+        EditingSupplier = new Supplier
+            {
+                Id = supplier.Id,
+                Name = supplier.Name,
+                Location = supplier.Location
+            };
+        ShowForm = true;
+    }
+
+    private async Task SaveSupplier()
+    {
+        if (EditingSupplier.Id == 0)
+        {
+            // Add new supplier
+            await SupplierService.AddSupplierAsync(EditingSupplier);
+        }
+        else
+        {
+            // Update existing supplier
+            await SupplierService.UpdateSupplierAsync(EditingSupplier);
+        }
+
+        ShowForm = false;
+        await LoadSuppliers();
+    }
+
+    private void Cancel()
+    {
+        ShowForm = false;
+    }
+
+    private async Task Delete(int id)
+    {
+        await SupplierService.DeleteSupplierAsync(id);
+        await LoadSuppliers();
+    }
+}

@@ -1,0 +1,62 @@
+﻿@page "/admin/products"
+
+@inject IProductService ProductService
+@using MonsterStop.Models
+
+<h3>Manage Products</h3>
+
+<button @onclick="AddNew">Add New Product</button>
+
+@if (Products == null)
+{
+        <p>Loading...</p>
+}
+else
+{
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th><th>Price</th><th>Category</th><th>Supplier</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Products)
+            {
+                        <tr>
+                            <td>@p.Name</td>
+                            <td>@p.Price</td>
+                            <td>@p.Category.Name</td>
+                            <td>@p.Supplier.Name</td>
+                            <td>
+                                <button @onclick="() => Edit(p)">Edit</button>
+                                <button @onclick="() => Delete(p.Id)">Delete</button>
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+
+@code {
+    private List<Product>? Products;
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await ProductService.GetAllProductsAsync();
+    }
+
+    private async Task Delete(int id)
+    {
+        await ProductService.DeleteProductAsync(id);
+        Products = await ProductService.GetAllProductsAsync();
+    }
+
+    private void AddNew()
+    {
+        // Show a form modal to add product
+    }
+
+    private void Edit(Product product)
+    {
+        // Show a form modal to edit product
+    }
+}

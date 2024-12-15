@@ -1,0 +1,112 @@
+﻿@page "/admin/categories"
+@using MonsterStop.Models
+@inject ICategoryService CategoryService
+
+<h3>Manage Categories</h3>
+
+@if (ShowForm)
+{
+        <div class="form-container">
+            <h4>@(EditingCategory.Id == 0 ? "Add New Category" : "Edit Category")</h4>
+            <input @bind="EditingCategory.Name" placeholder="Category Name" />
+
+            <button @onclick="SaveCategory">Save</button>
+            <button @onclick="Cancel">Cancel</button>
+        </div>
+}
+else
+{
+        <button @onclick="AddNew">Add New Category</button>
+
+    @if (Categories == null)
+    {
+                <p>Loading...</p>
+    }
+    else if (!Categories.Any())
+    {
+                <p>No categories available.</p>
+    }
+    else
+    {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                @foreach (var c in Categories)
+                {
+                                <tr>
+                                    <td>@c.Name</td>
+                                    <td>
+                                        <button @onclick="@(() => Edit(c))">Edit</button>
+                                        <button @onclick="@(() => Delete(c.Id))">Delete</button>
+                                    </td>
+                                </tr>
+                }
+                    </tbody>
+                </table>
+    }
+}
+
+@code {
+    private List<Category>? Categories;
+    private Category EditingCategory = new Category();
+    private bool ShowForm = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+    }
+
+    private async Task LoadCategories()
+    {
+        Categories = await CategoryService.GetAllCategoriesAsync();
+    }
+
+    private void AddNew()
+    {
+        EditingCategory = new Category();
+        ShowForm = true;
+    }
+
+    private void Edit(Category category)
+    {
+        EditingCategory = new Category
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
+        ShowForm = true;
+    }
+
+    private async Task SaveCategory()
+    {
+        if (EditingCategory.Id == 0)
+        {
+            // Add new category
+            await CategoryService.AddCategoryAsync(EditingCategory);
+        }
+        else
+        {
+            // Update existing category
+            await CategoryService.UpdateCategoryAsync(EditingCategory);
+        }
+
+        ShowForm = false;
+        await LoadCategories();
+    }
+
+    private void Cancel()
+    {
+        ShowForm = false;
+    }
+
+    private async Task Delete(int id)
+    {
+        await CategoryService.DeleteCategoryAsync(id);
+        await LoadCategories();
+    }
+}
