@@ -118,9 +118,11 @@
                 Price = product.Price,
                 CategoryId = product.CategoryId,
                 SupplierId = product.SupplierId
+                // Do not assign product.Category or product.Supplier here
             };
         ShowForm = true;
     }
+
 
     private async Task SaveProduct()
     {

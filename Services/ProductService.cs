@@ -33,10 +33,27 @@ public class ProductService : IProductService
     }
 
     public async Task UpdateProductAsync(Product product)
+{
+    var existingProduct = await _context.Products.FindAsync(product.Id);
+    if (existingProduct == null)
     {
-        _context.Products.Update(product);
-        await _context.SaveChangesAsync();
+        // Handle not found, either return or throw exception
+        return;
     }
+
+    // Update only the scalar properties and foreign keys.
+    // Do not reassign the navigation properties themselves, just their IDs, 
+    // to avoid re-attaching already tracked entities.
+    existingProduct.Name = product.Name;
+    existingProduct.Description = product.Description;
+    existingProduct.Price = product.Price;
+    existingProduct.CategoryId = product.CategoryId;
+    existingProduct.SupplierId = product.SupplierId;
+
+    // Just SaveChanges, no Update call
+    await _context.SaveChangesAsync();
+}
+
 
     public async Task DeleteProductAsync(int id)
     {
