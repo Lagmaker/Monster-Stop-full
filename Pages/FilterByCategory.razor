@@ -1,0 +1,35 @@
+﻿@page "/filterbycategory/{categoryId:int}"
+@using MonsterStop.Models
+@inject IProductService ProductService
+
+<h3>Filter Products By Category</h3>
+
+<p>Showing products grouped by supplier for category ID: @CategoryId</p>
+
+@if (GroupedData == null)
+{
+        <p>Loading...</p>
+}
+else
+{
+    @foreach (var group in GroupedData)
+    {
+                <h4>Supplier: @group.Key.Name</h4>
+                <ul>
+            @foreach (var product in group)
+            {
+                            <li>@product.Name (@product.Price:C)</li>
+            }
+                </ul>
+    }
+}
+
+@code {
+    [Parameter] public int CategoryId { get; set; }
+    private IEnumerable<IGrouping<Supplier, Product>>? GroupedData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        GroupedData = await ProductService.GetProductsGroupedBySupplierAsync(CategoryId);
+    }
+}

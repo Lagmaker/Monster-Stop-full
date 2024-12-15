@@ -7,4 +7,5 @@ public interface IProductService
     Task<Product> AddProductAsync(Product product);
     Task UpdateProductAsync(Product product);
     Task DeleteProductAsync(int id);
+    Task<IEnumerable<IGrouping<Supplier, Product>>> GetProductsGroupedBySupplierAsync(int categoryId);
 }

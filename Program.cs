@@ -19,6 +19,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 
 
+
 // Add services to the container.
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();

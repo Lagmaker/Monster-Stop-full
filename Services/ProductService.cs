@@ -47,4 +47,22 @@ public class ProductService : IProductService
             await _context.SaveChangesAsync();
         }
     }
+
+
+
+    public async Task<IEnumerable<IGrouping<Supplier, Product>>> GetProductsGroupedBySupplierAsync(int categoryId)
+    {
+        // Query products, filter by category, include suppliers
+        var products = await _context.Products
+            .Include(p => p.Supplier)
+            .Where(p => p.CategoryId == categoryId)
+            .ToListAsync();
+
+        // Group products by their supplier
+        var grouped = products.GroupBy(p => p.Supplier);
+        return grouped;
+    }
+
 }
+
+
