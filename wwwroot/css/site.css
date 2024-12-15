@@ -233,3 +233,60 @@ body {
         outline: none;
         box-shadow: 0 0 5px #E100FF, 0 0 10px #E100FF;
     }
+
+
+
+
+.input-glass {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    transition: box-shadow 0.3s;
+    position: relative;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+    .input-glass::placeholder {
+        color: rgba(255,255,255,0.5);
+    }
+
+    .input-glass:focus {
+        outline: none;
+        box-shadow: 0 0 5px #E100FF, 0 0 10px #E100FF;
+    }
+
+    /* Add a custom arrow for selects */
+    .input-glass:not([multiple]):after {
+        content: '';
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 6px solid transparent;
+        border-top-color: #E100FF; /* Arrow color */
+        pointer-events: none;
+    }
+
+    /* On hover and focus, arrow glows slightly */
+    .input-glass:hover:after, .input-glass:focus:after {
+        border-top-color: #fff;
+    }
+
+    /* Make sure text is visible and white inside the dropdown */
+    .input-glass option {
+        background: #1e1e1e; /* Matches dark theme */
+        color: #ffffff;
+    }
+
+    /* If you want the dropdown list itself to have a certain style (not all browsers apply these easily): */
+    .input-glass::-ms-expand {
+        display: none; /* Hide default arrow in older IE/Edge */
+    }
