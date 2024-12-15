@@ -1,9 +1,52 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<div class="transparent-panel">
+    <h1 class="rainbow-text">Welcome to Monster-Stop</h1>
 
-<h1>Hello, world!</h1>
+    <p style="margin-top:20px; line-height:1.6;">
+        Monster-Stop is your ultimate online store for the best energy drinks. We provide a wide selection 
+        of beverages, from classic flavors to zero-sugar and special-edition varieties, all sourced 
+        from top-notch suppliers.
+    </p>
 
-Welcome to your new app.
+    <h2 style="margin-top:30px; color:#e1e1ff;">What You’ll Find Here</h2>
+    <ul style="list-style:none; padding-left:0; margin-top:20px; line-height:1.8; color:#fff;">
+        <li><strong>Product Management:</strong> Add, edit, and remove products using our admin panel.</li>
+        <li><strong>Categories & Suppliers:</strong> Manage categories to keep products organized, and maintain a list of suppliers.</li>
+        <li><strong>Order & OrderItems:</strong> Track orders placed by customers and the items within each order.</li>
+        <li><strong>Filtering & Grouping:</strong> Easily filter products by category and view them grouped by supplier for better organization.</li>
+    </ul>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <h2 style="margin-top:30px; color:#e1e1ff;">Key Features</h2>
+    <p style="line-height:1.6;">
+        Our project showcases a modern Blazor Server application integrated with EF Core for data management. 
+        Enjoy futuristic styling with neon gradients, glassmorphic panels, and dynamic visual effects. We’ve 
+        implemented full CRUD operations for multiple entities, user-friendly filtering, and a cohesive admin 
+        interface.
+    </p>
+
+    <h2 style="margin-top:30px; color:#e1e1ff;">Navigation</h2>
+    <p style="margin-bottom:20px; line-height:1.6;">
+        Use the top navigation bar to access different sections of the site:
+    </p>
+
+    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:30px;">
+        <a href="/admin/products" class="btn-neon">Products Admin</a>
+        <a href="/admin/categories" class="btn-neon">Categories Admin</a>
+        <a href="/admin/suppliers" class="btn-neon">Suppliers Admin</a>
+        <a href="/filterbycategory" class="btn-neon">Filter by Category</a>
+    </div>
+
+    <h2 style="margin-top:30px; color:#e1e1ff;">How to Use</h2>
+    <ul style="list-style:none; padding-left:0; margin-top:20px; line-height:1.8; color:#fff;">
+        <li><strong>View Products:</strong> Head to <a href="/admin/products" class="btn-neon-outlined" style="padding:5px 10px; text-decoration:none;">Products Admin</a> to see all products, add new ones, or edit and delete existing items.</li>
+        <li><strong>Manage Categories:</strong> Under <a href="/admin/categories" class="btn-neon-outlined" style="padding:5px 10px; text-decoration:none;">Categories Admin</a>, create or update categories to organize your products.</li>
+        <li><strong>Manage Suppliers:</strong> Keep track of all suppliers and their details at <a href="/admin/suppliers" class="btn-neon-outlined" style="padding:5px 10px; text-decoration:none;">Suppliers Admin</a>.</li>
+        <li><strong>Filter by Category:</strong> Visit <a href="/filterbycategory" class="btn-neon-outlined" style="padding:5px 10px; text-decoration:none;">Filter by Category</a> to view products grouped by supplier without touching the URL bar.</li>
+    </ul>
+
+    <p style="margin-top:30px; line-height:1.6;">
+        With Monster-Stop, we demonstrate a fully functional, stylish, and dynamic Blazor application integrated 
+        with Entity Framework Core. Enjoy browsing, organizing, and managing your inventory like never before!
+    </p>
+</div>
