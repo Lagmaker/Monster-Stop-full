@@ -2,57 +2,62 @@
 @using MonsterStop.Models
 @inject ISupplierService SupplierService
 
-<h3>Manage Suppliers</h3>
+<div class="transparent-panel">
+    <h3 class="rainbow-text">Manage Suppliers</h3>
 
-@if (ShowForm)
-{
-        <div class="form-container">
-            <h4>@(EditingSupplier.Id == 0 ? "Add New Supplier" : "Edit Supplier")</h4>
-            <input @bind="EditingSupplier.Name" placeholder="Supplier Name" />
-            <input @bind="EditingSupplier.Location" placeholder="Location" />
-
-            <button @onclick="SaveSupplier">Save</button>
-            <button @onclick="Cancel">Cancel</button>
-        </div>
-}
-else
-{
-        <button @onclick="AddNew">Add New Supplier</button>
-
-    @if (Suppliers == null)
+    @if (ShowForm)
     {
-                <p>Loading...</p>
-    }
-    else if (!Suppliers.Any())
-    {
-                <p>No suppliers available.</p>
+            <div class="form-container" style="margin-top:20px;">
+                <h4>@(EditingSupplier.Id == 0 ? "Add New Supplier" : "Edit Supplier")</h4>
+
+                <input class="input-glass" @bind="EditingSupplier.Name" placeholder="Supplier Name" style="margin-top:10px;" />
+                <input class="input-glass" @bind="EditingSupplier.Location" placeholder="Location" style="margin-top:10px;" />
+
+                <div style="margin-top:20px;">
+                    <button class="btn-neon" @onclick="SaveSupplier">Save</button>
+                    <button class="btn-neon-outlined" style="margin-left:10px;" @onclick="Cancel">Cancel</button>
+                </div>
+            </div>
     }
     else
     {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                @foreach (var s in Suppliers)
-                {
-                                <tr>
-                                    <td>@s.Name</td>
-                                    <td>@s.Location</td>
-                                    <td>
-                                        <button @onclick="@(() => Edit(s))">Edit</button>
-                                        <button @onclick="@(() => Delete(s.Id))">Delete</button>
+            <button class="btn-neon" @onclick="AddNew" style="margin-bottom:20px;">Add New Supplier</button>
+
+        @if (Suppliers == null)
+        {
+                    <p>Loading...</p>
+        }
+        else if (!Suppliers.Any())
+        {
+                    <p>No suppliers available.</p>
+        }
+        else
+        {
+                    <table style="width:100%; border-collapse: collapse; margin-top:20px;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                <th style="text-align:left; padding:10px;">Name</th>
+                                <th style="text-align:left; padding:10px;">Location</th>
+                                <th style="text-align:left; padding:10px; width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    @foreach (var s in Suppliers)
+                    {
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding:10px;">@s.Name</td>
+                                    <td style="padding:10px;">@s.Location</td>
+                                    <td style="padding:10px;">
+                                        <button class="btn-neon" style="margin-right:10px;" @onclick="@(() => Edit(s))">Edit</button>
+                                        <button class="btn-neon-outlined" @onclick="@(() => Delete(s.Id))">Delete</button>
                                     </td>
                                 </tr>
-                }
-                    </tbody>
-                </table>
+                    }
+                        </tbody>
+                    </table>
+        }
     }
-}
+</div>
 
 @code {
     private List<Supplier>? Suppliers;

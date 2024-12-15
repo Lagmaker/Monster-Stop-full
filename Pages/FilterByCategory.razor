@@ -2,27 +2,37 @@
 @using MonsterStop.Models
 @inject IProductService ProductService
 
-<h3>Filter Products By Category</h3>
+<div class="transparent-panel">
+    <h3 class="rainbow-text">Filter Products By Category</h3>
+    <p>Showing products grouped by supplier for category ID: <strong>@CategoryId</strong></p>
 
-<p>Showing products grouped by supplier for category ID: @CategoryId</p>
-
-@if (GroupedData == null)
-{
-        <p>Loading...</p>
-}
-else
-{
-    @foreach (var group in GroupedData)
+    @if (GroupedData == null)
     {
-                <h4>Supplier: @group.Key.Name</h4>
-                <ul>
-            @foreach (var product in group)
-            {
-                            <li>@product.Name (@product.Price:C)</li>
-            }
-                </ul>
+            <p>Loading...</p>
     }
-}
+    else if (!GroupedData.Any())
+    {
+            <p>No products found for this category.</p>
+    }
+    else
+    {
+        @foreach (var group in GroupedData)
+        {
+                    <h4 style="margin-top:30px; text-shadow:0 0 5px rgba(255,255,255,0.5); color:#e1e1ff;">
+                        Supplier: @group.Key.Name
+                    </h4>
+                    <ul style="list-style:none; padding-left:0; margin-top:10px;">
+                @foreach (var product in group)
+                {
+                                <li style="margin-bottom:5px;">
+                                    <span style="font-weight:600; color:#fff;">@product.Name</span> 
+                                    <span style="color:rgba(255,255,255,0.7);">(@product.Price:C)</span>
+                                </li>
+                }
+                    </ul>
+        }
+    }
+</div>
 
 @code {
     [Parameter] public int CategoryId { get; set; }

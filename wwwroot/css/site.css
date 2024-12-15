@@ -91,3 +91,145 @@ body {
     .transparent-panel p, .transparent-panel li {
         line-height: 1.6;
     }
+
+
+
+/* Neon glass button styling */
+.btn-neon {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    background: linear-gradient(90deg, #7F00FF 0%, #E100FF 100%);
+    box-shadow: 0 0 8px #E100FF, 0 0 16px #E100FF;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+    .btn-neon:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 12px #E100FF, 0 0 24px #E100FF;
+    }
+
+    .btn-neon:active {
+        transform: translateY(0px);
+    }
+
+/* Variant: Outlined Neon button */
+.btn-neon-outlined {
+    background: transparent;
+    border: 2px solid #E100FF;
+    color: #E100FF;
+    box-shadow: none;
+}
+
+    .btn-neon-outlined:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+/* Glassmorphic input fields */
+.input-glass {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    transition: box-shadow 0.3s;
+}
+
+    .input-glass::placeholder {
+        color: rgba(255,255,255,0.5);
+    }
+
+    .input-glass:focus {
+        outline: none;
+        box-shadow: 0 0 5px #E100FF, 0 0 10px #E100FF;
+    }
+
+
+
+
+.rainbow-text {
+    background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.transparent-panel {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 40px auto;
+    max-width: 800px;
+}
+
+.btn-neon {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(90deg, #7F00FF 0%, #E100FF 100%);
+    box-shadow: 0 0 8px #E100FF, 0 0 16px #E100FF;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+    .btn-neon:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 12px #E100FF, 0 0 24px #E100FF;
+    }
+
+.btn-neon-outlined {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid #E100FF;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #E100FF;
+    background: transparent;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+    .btn-neon-outlined:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+.input-glass {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    transition: box-shadow 0.3s;
+}
+
+    .input-glass::placeholder {
+        color: rgba(255,255,255,0.5);
+    }
+
+    .input-glass:focus {
+        outline: none;
+        box-shadow: 0 0 5px #E100FF, 0 0 10px #E100FF;
+    }

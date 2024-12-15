@@ -1,44 +1,54 @@
 ﻿@page "/admin/products"
-
-@inject IProductService ProductService
 @using MonsterStop.Models
+@inject IProductService ProductService
 
-<h3>Manage Products</h3>
+<div class="transparent-panel">
+    <h3 class="rainbow-text">Manage Products</h3>
 
-<button @onclick="AddNew">Add New Product</button>
+    <button class="btn-neon" @onclick="AddNew" style="margin-bottom:20px;">Add New Product</button>
 
-@if (Products == null)
-{
-        <p>Loading...</p>
-}
-else
-{
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th><th>Price</th><th>Category</th><th>Supplier</th><th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var p in Products)
-            {
-                        <tr>
-                            <td>@p.Name</td>
-                            <td>@p.Price</td>
-                            <td>@p.Category.Name</td>
-                            <td>@p.Supplier.Name</td>
-                            <td>
-                                <button @onclick="() => Edit(p)">Edit</button>
-                                <button @onclick="() => Delete(p.Id)">Delete</button>
+    @if (Products == null)
+    {
+            <p>Loading...</p>
+    }
+    else if (!Products.Any())
+    {
+            <p>No products available.</p>
+    }
+    else
+    {
+            <table style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <th style="text-align:left; padding:10px;">Name</th>
+                        <th style="text-align:left; padding:10px;">Price</th>
+                        <th style="text-align:left; padding:10px;">Category</th>
+                        <th style="text-align:left; padding:10px;">Supplier</th>
+                        <th style="text-align:left; padding:10px; width:150px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Products)
+                {
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding:10px;">@p.Name</td>
+                            <td style="padding:10px;">@p.Price:C</td>
+                            <td style="padding:10px;">@p.Category.Name</td>
+                            <td style="padding:10px;">@p.Supplier.Name</td>
+                            <td style="padding:10px;">
+                                <button class="btn-neon" style="margin-right:10px;" @onclick="() => Edit(p)">Edit</button>
+                                <button class="btn-neon-outlined" @onclick="() => Delete(p.Id)">Delete</button>
                             </td>
                         </tr>
-            }
-            </tbody>
-        </table>
-}
+                }
+                </tbody>
+            </table>
+    }
+</div>
 
 @code {
     private List<Product>? Products;
+
     protected override async Task OnInitializedAsync()
     {
         Products = await ProductService.GetAllProductsAsync();
@@ -52,11 +62,11 @@ else
 
     private void AddNew()
     {
-        // Show a form modal to add product
+        // Future: Show a form modal or section to add a new product
     }
 
     private void Edit(Product product)
     {
-        // Show a form modal to edit product
+        // Future: Show a form modal or section to edit the selected product
     }
 }

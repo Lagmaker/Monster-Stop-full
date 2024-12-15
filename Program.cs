@@ -39,7 +39,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+//builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
